@@ -42,6 +42,8 @@
 <body>
   <h1>Inventario</h1>
 
+  <button onclick="window.location.href='index.html'">Volver a la pantalla principal</button>
+
   <!-- Tabla para mostrar productos -->
   <table>
     <thead>
@@ -118,9 +120,9 @@
   
       inventario.push({
         cant: cantidad,
-        item: item,
-        modelo: modelo,
-        marca: marca
+        item,
+        modelo,
+        marca
       });
   
       guardarInventario();
@@ -164,18 +166,21 @@
   
     // Guardar inventario en el archivo JSON
     function guardarInventario() {
-      window.electron.ipcRenderer.send('guardar-inventario', inventario);
-  
-      // Manejar respuesta de éxito o error
-      window.electron.ipcRenderer.once('guardar-inventario-exito', () => {
-        console.log('El inventario se guardó correctamente.');
-      });
-  
-      window.electron.ipcRenderer.once('guardar-inventario-error', (event, message) => {
-        alert('Error al guardar el inventario: ' + message);
-      });
+      if (window.electron && window.electron.ipcRenderer) {
+        window.electron.ipcRenderer.send('guardar-inventario', inventario);
+
+        window.electron.ipcRenderer.once('guardar-inventario-exito', () => {
+          console.log('El inventario se guardó correctamente.');
+        });
+
+        window.electron.ipcRenderer.once('guardar-inventario-error', (message) => {
+          alert('Error al guardar el inventario: ' + message);
+        });
+      } else {
+        console.warn('Electron no está disponible.');
+      }
+
     }
   </script>
-  
 </body>
 </html>

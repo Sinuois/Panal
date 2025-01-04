@@ -9,8 +9,7 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: false,  // Cambié a false por seguridad (usando preload.js)
-      preload: path.join(__dirname, 'preload.js')  // Asegúrate de tener un archivo preload.js si necesitas algún código extra
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
@@ -53,6 +52,25 @@ ipcMain.on('agregar-proyecto', (event, nuevoProyecto) => {
         return;
       }
       console.log('Nuevo proyecto agregado exitosamente.');
+    });
+  });
+});
+
+// Escuchar el evento de agregar proyecto
+ipcMain.on('guardar-inventario', (event, productosConNuevo) => {
+  fs.readFile('inventario.json', (err, data) => {
+    if (err) {
+      console.error('Error al leer inventario.json:', err);
+      return;
+    }
+
+    // Escribir de nuevo el archivo inventario.json con el nuevo producto agregado
+    fs.writeFile('inventario.json', JSON.stringify(productosConNuevo, null, 2), (err) => {
+      if (err) {
+        console.error('Error al guardar inventario.json:', err);
+        return;
+      }
+      console.log('Inventario guardado exitosamente.');
     });
   });
 });
