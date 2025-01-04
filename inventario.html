@@ -70,6 +70,26 @@
     <button onclick="agregarProducto()">Agregar Producto</button>
   </div>
 
+  <!-- Modal de Edición -->
+  <div id="modalEdicion" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid #ccc; width: 300px;">
+    <h3>Editar Producto</h3>
+    <label for="edit-cantidad">Cantidad:</label>
+    <input type="number" id="edit-cantidad" required><br>
+    
+    <label for="edit-item">Item:</label>
+    <input type="text" id="edit-item" required><br>
+
+    <label for="edit-modelo">Modelo:</label>
+    <input type="text" id="edit-modelo" required><br>
+
+    <label for="edit-marca">Marca:</label>
+    <input type="text" id="edit-marca" required><br>
+
+    <button onclick="guardarEdicion()">Guardar cambios</button>
+    <button onclick="cerrarModal()">Cancelar</button>
+  </div>
+
+
   <script>
     let inventario = [];
   
@@ -138,22 +158,54 @@
     // Función para editar un producto
     function editarProducto(index) {
       const producto = inventario[index];
-      const nuevaCantidad = prompt('Nueva cantidad:', producto.cant);
-      const nuevoItem = prompt('Nuevo item:', producto.item);
-      const nuevoModelo = prompt('Nuevo modelo:', producto.modelo);
-      const nuevaMarca = prompt('Nueva marca:', producto.marca);
-  
-      if (nuevaCantidad && nuevoItem && nuevoModelo && nuevaMarca) {
-        inventario[index] = {
-          cant: nuevaCantidad,
-          item: nuevoItem,
-          modelo: nuevoModelo,
-          marca: nuevaMarca
-        };
-        guardarInventario();
-        actualizarTabla();
-      }
+      
+      // Mostrar el modal
+      document.getElementById('modalEdicion').style.display = 'block';
+      
+      // Rellenar los campos del modal con los valores del producto
+      document.getElementById('edit-cantidad').value = producto.cant;
+      document.getElementById('edit-item').value = producto.item;
+      document.getElementById('edit-modelo').value = producto.modelo;
+      document.getElementById('edit-marca').value = producto.marca;
+
+      // Almacenar el índice del producto en una variable global para usarlo al guardar los cambios
+      window.productoEditando = index;
     }
+
+    // Función para guardar la edición del producto
+    function guardarEdicion() {
+      const cantidad = document.getElementById('edit-cantidad').value;
+      const item = document.getElementById('edit-item').value;
+      const modelo = document.getElementById('edit-modelo').value;
+      const marca = document.getElementById('edit-marca').value;
+      
+      // Verificar que todos los campos estén completos
+      if (!cantidad || !item || !modelo || !marca) {
+        alert('Por favor, completa todos los campos.');
+        return;
+      }
+
+      // Actualizar el producto en el inventario
+      inventario[window.productoEditando] = {
+        cant: cantidad,
+        item,
+        modelo,
+        marca
+      };
+
+      // Guardar inventario y actualizar la tabla
+      guardarInventario();
+      actualizarTabla();
+
+      // Cerrar el modal
+      cerrarModal();
+    }
+
+    // Función para cerrar el modal
+    function cerrarModal() {
+      document.getElementById('modalEdicion').style.display = 'none';
+    }
+
   
     // Función para eliminar un producto
     function eliminarProducto(index) {
