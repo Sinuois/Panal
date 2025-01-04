@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    button {
+      margin: 5px;
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #add-product-form {
+      margin: 20px 0;
+    }
+    #add-product-form input {
+      margin: 5px;
+      padding: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Inventario</h1>
+
+  <!-- Tabla para mostrar productos -->
+  <table>
+    <thead>
+      <tr>
+        <th>Cantidad</th>
+        <th>Item</th>
+        <th>Modelo</th>
+        <th>Marca</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="inventario-tabla">
+      <!-- Los productos se cargarán dinámicamente aquí -->
+    </tbody>
+  </table>
+
+  <!-- Formulario para agregar productos -->
+  <div id="add-product-form">
+    <h3>Agregar Nuevo Producto</h3>
+    <input type="number" id="new-cantidad" placeholder="Cantidad" min="1" required>
+    <input type="text" id="new-item" placeholder="Item" required>
+    <input type="text" id="new-modelo" placeholder="Modelo" required>
+    <input type="text" id="new-marca" placeholder="Marca" required>
+    <button onclick="agregarProducto()">Agregar Producto</button>
+  </div>
+
+  <script>
+    let inventario = [];
+  
+    // Cargar inventario al cargar la página
+    window.onload = () => {
+      fetch('inventario.json')
+        .then(response => response.json())
+        .then(data => {
+          inventario = data;
+          actualizarTabla();
+        })
+        .catch(error => {
+          console.error('Error al cargar el inventario:', error);
+        });
+    };
+  
+    // Actualizar la tabla de inventario
+    function actualizarTabla() {
+      const tabla = document.getElementById('inventario-tabla');
+      tabla.innerHTML = ''; // Limpiar tabla
+      inventario.forEach((producto, index) => {
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+          <td>${producto.cant}</td>
+          <td>${producto.item}</td>
+          <td>${producto.modelo}</td>
+          <td>${producto.marca}</td>
+          <td>
+            <button onclick="editarProducto(${index})">Editar</button>
+            <button onclick="eliminarProducto(${index})">Eliminar</button>
+          </td>
+        `;
+        tabla.appendChild(fila);
+      });
+    }
+  
+    // Función para agregar un nuevo producto
+    function agregarProducto() {
+      const cantidad = document.getElementById('new-cantidad').value;
+      const item = document.getElementById('new-item').value;
+      const modelo = document.getElementById('new-modelo').value;
+      const marca = document.getElementById('new-marca').value;
+  
+      if (!cantidad || !item || !modelo || !marca) {
+        alert('Por favor, completa todos los campos.');
+        return;
+      }
+  
+      inventario.push({
+        cant: cantidad,
+        item: item,
+        modelo: modelo,
+        marca: marca
+      });
+  
+      guardarInventario();
+      actualizarTabla();
+  
+      // Limpiar campos del formulario
+      document.getElementById('new-cantidad').value = '';
+      document.getElementById('new-item').value = '';
+      document.getElementById('new-modelo').value = '';
+      document.getElementById('new-marca').value = '';
+    }
+  
+    // Función para editar un producto
+    function editarProducto(index) {
+      const producto = inventario[index];
+      const nuevaCantidad = prompt('Nueva cantidad:', producto.cant);
+      const nuevoItem = prompt('Nuevo item:', producto.item);
+      const nuevoModelo = prompt('Nuevo modelo:', producto.modelo);
+      const nuevaMarca = prompt('Nueva marca:', producto.marca);
+  
+      if (nuevaCantidad && nuevoItem && nuevoModelo && nuevaMarca) {
+        inventario[index] = {
+          cant: nuevaCantidad,
+          item: nuevoItem,
+          modelo: nuevoModelo,
+          marca: nuevaMarca
+        };
+        guardarInventario();
+        actualizarTabla();
+      }
+    }
+  
+    // Función para eliminar un producto
+    function eliminarProducto(index) {
+      if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+        inventario.splice(index, 1);
+        guardarInventario();
+        actualizarTabla();
+      }
+    }
+  
+    // Guardar inventario en el archivo JSON
+    function guardarInventario() {
+      window.electron.ipcRenderer.send('guardar-inventario', inventario);
+  
+      // Manejar respuesta de éxito o error
+      window.electron.ipcRenderer.once('guardar-inventario-exito', () => {
+        console.log('El inventario se guardó correctamente.');
+      });
+  
+      window.electron.ipcRenderer.once('guardar-inventario-error', (event, message) => {
+        alert('Error al guardar el inventario: ' + message);
+      });
+    }
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantalla de Inicio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bienvenido a la Gestión de Inventario</h1>
+
+  <button onclick="irAProyecto()">Ver proyectos</button>
+  <button onclick="irAInventario()">Ver y agregar productos de inventario</button>
+  <button onclick="agregarProyecto()">Agregar Proyecto</button> <!-- Nuevo botón -->
+
+  <script>
+    function irAProyecto() {
+      window.location.href = 'proyectos.html';  // Redirigir a la página de proyectos
+    }
+
+    function irAInventario() {
+      window.location.href = 'inventario.html';  // Redirigir a la página de inventario
+    }
+
+    function agregarProyecto() {
+      window.location.href = 'agregarProyecto.html';  // Redirigir a la pantalla de agregar proyecto
+    }
+  </script>
+</body>
+</html>

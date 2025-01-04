@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ver Proyectos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .proyecto {
+      margin-bottom: 10px;
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+    }
+    .productos {
+      margin-top: 20px;
+    }
+    .producto {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Proyectos</h1>
+  
+  <!-- Contenedor donde se mostrarán los proyectos -->
+  <div id="contenedor-proyectos"></div>
+
+  <div id="productos-asociados" style="display:none;">
+    <h3>Productos Asociados</h3>
+    <ul id="lista-productos"></ul>
+  </div>
+  
+  <!-- Botón para regresar a la pantalla principal -->
+  <button onclick="window.location.href='index.html'">Volver a la pantalla principal</button>
+
+  <script>
+    window.onload = () => {
+      // Cargar proyectos desde el archivo JSON
+      fetch('proyectos.json')
+        .then(response => response.json())
+        .then(proyectos => {
+          const contenedorProyectos = document.getElementById('contenedor-proyectos');
+          contenedorProyectos.innerHTML = '';  // Limpiar contenido previo
+
+          proyectos.forEach((proyecto, index) => {
+            // Añadir el proyecto a la lista, cada uno como un enlace que se puede seleccionar
+            const proyectoDiv = document.createElement('div');
+            proyectoDiv.classList.add('proyecto');
+            proyectoDiv.innerHTML = `${proyecto.nombre}`;
+            proyectoDiv.onclick = () => verProductos(proyecto, proyectos); // Al hacer clic en un proyecto, mostramos los productos
+            contenedorProyectos.appendChild(proyectoDiv);
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar los proyectos:', error);
+        });
+    };
+
+    function verProductos(proyectoSeleccionado, proyectos) {
+      // Limpiar productos anteriores antes de mostrar los nuevos
+      const listaProductos = document.getElementById('lista-productos');
+      listaProductos.innerHTML = '';  // Limpiar la lista de productos
+
+      // Encontrar el proyecto en el JSON
+      const proyecto = proyectos.find(p => p.nombre === proyectoSeleccionado.nombre);
+
+      if (proyecto) {
+        // Mostrar los productos asociados al proyecto
+        const productosDiv = document.getElementById('productos-asociados');
+        productosDiv.style.display = proyecto.productos.length ? 'block' : 'none';
+
+        proyecto.productos.forEach((producto) => {
+          const productoLi = document.createElement('li');
+          productoLi.classList.add('producto');
+          productoLi.innerHTML = `
+            <strong>Item:</strong> ${producto.item} <br>
+            <strong>Modelo:</strong> ${producto.modelo} <br>
+            <strong>Marca:</strong> ${producto.marca}
+          `;
+          listaProductos.appendChild(productoLi);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
