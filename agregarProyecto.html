@@ -1,34 +1,105 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agregar Proyecto</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #FFFAE6;
+      /* Fondo con tono crema */
+      color: #5B3E16;
+      /* Color marrón para texto */
+      margin: 0;
+      padding: 0;
     }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #FF8C00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
     button {
-      margin: 10px;
+      background-color: #FFB800;
+      color: #FFF;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #FF9D00;
+    }
+
+    #add-project-form {
+      background-color: #FFF;
+      padding: 15px;
+      border: 2px solid #FFB800;
+      border-radius: 8px;
+      margin: 20px auto;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      max-width: 1000px;
+    }
+
+    #input-nombre input {
+      width: calc(100% - 20px);
       padding: 10px;
-      font-size: 16px;
+      margin-bottom: 10px;
+      border: 2px solid #FFB800;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    #project-list li:hover {
+      background-color: #FFF3B3;
+    }
+
+    .action-icon {
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: transform 0.2s ease, color 0.3s ease;
+    }
+
+    .action-icon:hover {
+      transform: scale(1.2);
+    }
+
+    div.scrollable-container {
+      background-color: #FFF3B3;
+      height: 400px;
+      overflow: scroll;
+      max-width: 1000px;
     }
   </style>
 </head>
+
 <body>
   <h1>Agregar Nuevo Proyecto</h1>
 
-  <!-- Formulario para ingresar nombre del proyecto -->
-  <label for="nombre-proyecto">Nombre del Proyecto:</label>
-  <input type="text" id="nombre-proyecto" placeholder="Ingresa el nombre del proyecto" required>
-  
-  <h3>Selecciona los Productos:</h3>
+  <div id="add-project-form">
+    <div id="input-nombre">
+      <input type="text" id="nombre-proyecto" placeholder="Ingresa el nombre del proyecto" required>
+    </div>
+    <h3>Selecciona los productos asociados:</h3>
+    <div class="scrollable-container">
+      <div id="productos-lista"></div>
+    </div>
+    <div style="margin: 10px; display: flex; justify-content: flex-end">
+      <button onclick="guardarProyecto()">Guardar Proyecto</button>
+      
+      <button style="margin-left: 10px;" onclick="window.location.href='index.html'">Volver</button>
+    </div>
 
-  <!-- Lista de productos disponibles para seleccionar -->
-  <div id="productos-lista"></div>
 
-  <button onclick="guardarProyecto()">Guardar Proyecto</button>
-  <button onclick="window.location.href='index.html'">Cancelar</button>
+  </div>
 
   <script>
     let inventario = [];  // Variable global para almacenar el inventario
@@ -87,6 +158,8 @@
       // Redirigir a la pantalla principal después de agregar el proyecto
       window.location.href = 'index.html';
     }
+
   </script>
 </body>
+
 </html>

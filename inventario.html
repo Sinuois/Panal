@@ -1,66 +1,189 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Inventario</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #FFFAE6;
+      /* Fondo con tono crema */
+      color: #5B3E16;
+      /* Color marrón para texto */
+      margin: 0;
+      padding: 0;
     }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #FF8C00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    button {
+      background-color: #FFB800;
+      color: #FFF;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #FF9D00;
+    }
+
+    #add-product-form,
+    #modalEdicion {
+      background-color: #FFF;
+      padding: 15px;
+      border: 2px solid #FFB800;
+      border-radius: 8px;
+      margin: 20px auto;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+    }
+
+    #add-product-form input,
+    #modalEdicion input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 2px solid #FFB800;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 20px 0;
     }
-    table, th, td {
-      border: 1px solid black;
-    }
-    th, td {
-      padding: 10px;
+
+    table th,
+    table td {
       text-align: left;
+      padding: 12px;
+      font-size: 1rem;
     }
-    th {
-      background-color: #f2f2f2;
+
+    table th {
+      background-color: #FFB800;
+      color: white;
+      font-weight: bold;
     }
-    button {
+
+    table tr:nth-child(even) {
+      background-color: #FFF7D6;
+    }
+
+    table tr:hover {
+      background-color: #FFF3B3;
+    }
+
+    table,
+    th,
+    td {
+      border: 2px solid #FFB800;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #FF8C00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    #modalEdicion {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    #modalEdicion h3 {
+      text-align: center;
+      color: #5B3E16;
+    }
+
+    #modalEdicion button {
+      width: calc(50% - 10px);
       margin: 5px;
-      padding: 5px 10px;
-      font-size: 14px;
+    }
+
+    .action-icon {
       cursor: pointer;
+      font-size: 1.2rem;
+      margin-right: 10px;
+      transition: transform 0.2s ease, color 0.3s ease;
     }
-    #add-product-form {
-      margin: 20px 0;
+
+    .action-icon:hover {
+      transform: scale(1.2);
     }
-    #add-product-form input {
-      margin: 5px;
-      padding: 5px;
-      font-size: 14px;
+
+    .edit-icon {
+      color: #2E86C1;
+      /* Azul elegante */
+    }
+
+    .edit-icon:hover {
+      color: #1A5276;
+    }
+
+    .delete-icon {
+      color: #E74C3C;
+      /* Rojo vibrante */
+    }
+
+    .delete-icon:hover {
+      color: #C0392B;
     }
   </style>
 </head>
+
 <body>
+
   <h1>Inventario</h1>
 
-  <button onclick="window.location.href='index.html'">Volver a la pantalla principal</button>
 
-  <!-- Tabla para mostrar productos -->
-  <table>
-    <thead>
-      <tr>
-        <th>Cantidad</th>
-        <th>Item</th>
-        <th>Modelo</th>
-        <th>Marca</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="inventario-tabla">
-      <!-- Los productos se cargarán dinámicamente aquí -->
-    </tbody>
-  </table>
 
-  <!-- Formulario para agregar productos -->
+
+  <!-- Tabla de inventario -->
+  <div id="tabla-container" style="overflow: hidden; height: 200px; transition: height 0.3s ease;">
+    <table id="tabla-inventario" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>Cantidad</th>
+          <th>Item</th>
+          <th>Modelo</th>
+          <th>Marca</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="inventario-tabla">
+        <!-- Productos cargados dinámicamente -->
+      </tbody>
+    </table>
+  </div>
+  <!-- Botón para colapsar/descolapsar la tabla -->
+  <div style="margin: 10px; display: flex; justify-content: flex-end">
+    <i id="toggle-table" class="fa fa-plus action-icon edit-icon" onclick="toggleTable()"></i>
+  </div>
+
+  <!-- Formulario de agregar producto -->
   <div id="add-product-form">
     <h3>Agregar Nuevo Producto</h3>
     <input type="number" id="new-cantidad" placeholder="Cantidad" min="1" required>
@@ -70,12 +193,12 @@
     <button onclick="agregarProducto()">Agregar Producto</button>
   </div>
 
-  <!-- Modal de Edición -->
-  <div id="modalEdicion" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid #ccc; width: 300px;">
+  <!-- Modal para edición -->
+  <div id="modalEdicion">
     <h3>Editar Producto</h3>
     <label for="edit-cantidad">Cantidad:</label>
     <input type="number" id="edit-cantidad" required><br>
-    
+
     <label for="edit-item">Item:</label>
     <input type="text" id="edit-item" required><br>
 
@@ -89,10 +212,11 @@
     <button onclick="cerrarModal()">Cancelar</button>
   </div>
 
+  <button style="margin-left: 10px;" onclick="window.location.href='index.html'">Volver a la pantalla principal</button>
 
   <script>
     let inventario = [];
-  
+
     // Cargar inventario al cargar la página
     window.onload = () => {
       fetch('inventario.json')
@@ -105,7 +229,7 @@
           console.error('Error al cargar el inventario:', error);
         });
     };
-  
+
     // Actualizar la tabla de inventario
     function actualizarTabla() {
       const tabla = document.getElementById('inventario-tabla');
@@ -113,55 +237,55 @@
       inventario.forEach((producto, index) => {
         const fila = document.createElement('tr');
         fila.innerHTML = `
-          <td>${producto.cant}</td>
-          <td>${producto.item}</td>
-          <td>${producto.modelo}</td>
-          <td>${producto.marca}</td>
-          <td>
-            <button onclick="editarProducto(${index})">Editar</button>
-            <button onclick="eliminarProducto(${index})">Eliminar</button>
-          </td>
-        `;
+        <td>${producto.cant}</td>
+        <td>${producto.item}</td>
+        <td>${producto.modelo}</td>
+        <td>${producto.marca}</td>
+        <td>
+          <i class="fa fa-edit action-icon edit-icon" onclick="editarProducto(${index})"></i>
+          <i class="fa fa-trash-alt action-icon delete-icon" onclick="eliminarProducto(${index})"></i>
+        </td>
+      `;
         tabla.appendChild(fila);
       });
     }
-  
+
     // Función para agregar un nuevo producto
     function agregarProducto() {
       const cantidad = document.getElementById('new-cantidad').value;
       const item = document.getElementById('new-item').value;
       const modelo = document.getElementById('new-modelo').value;
       const marca = document.getElementById('new-marca').value;
-  
+
       if (!cantidad || !item || !modelo || !marca) {
         alert('Por favor, completa todos los campos.');
         return;
       }
-  
+
       inventario.push({
         cant: cantidad,
         item,
         modelo,
         marca
       });
-  
+
       guardarInventario();
       actualizarTabla();
-  
+
       // Limpiar campos del formulario
       document.getElementById('new-cantidad').value = '';
       document.getElementById('new-item').value = '';
       document.getElementById('new-modelo').value = '';
       document.getElementById('new-marca').value = '';
     }
-  
+
     // Función para editar un producto
     function editarProducto(index) {
       const producto = inventario[index];
-      
+
       // Mostrar el modal
       document.getElementById('modalEdicion').style.display = 'block';
-      
+
       // Rellenar los campos del modal con los valores del producto
       document.getElementById('edit-cantidad').value = producto.cant;
       document.getElementById('edit-item').value = producto.item;
@@ -178,7 +302,7 @@
       const item = document.getElementById('edit-item').value;
       const modelo = document.getElementById('edit-modelo').value;
       const marca = document.getElementById('edit-marca').value;
-      
+
       // Verificar que todos los campos estén completos
       if (!cantidad || !item || !modelo || !marca) {
         alert('Por favor, completa todos los campos.');
@@ -206,7 +330,7 @@
       document.getElementById('modalEdicion').style.display = 'none';
     }
 
-  
+
     // Función para eliminar un producto
     function eliminarProducto(index) {
       if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
@@ -215,7 +339,7 @@
         actualizarTabla();
       }
     }
-  
+
     // Guardar inventario en el archivo JSON
     function guardarInventario() {
       if (window.electron && window.electron.ipcRenderer) {
@@ -233,6 +357,28 @@
       }
 
     }
+
+    // Función para colapsar o descolapsar la tabla
+    function toggleTable() {
+      const tablaContainer = document.getElementById('tabla-container');
+      const button = document.getElementById('toggle-table');
+      const isExpanded = tablaContainer.style.height === 'auto';
+
+      // Si está expandida, colapsarla
+      if (isExpanded) {
+        tablaContainer.style.height = '200px';
+        button.classList.remove('fa-minus');
+        button.classList.add('fa-plus');
+      } else {
+        // Si está colapsada, expandirla
+        tablaContainer.style.height = 'auto';
+        button.classList.remove('fa-plus');
+        button.classList.add('fa-minus');
+        
+      }
+    }
+
   </script>
 </body>
+
 </html>

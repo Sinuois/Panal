@@ -5,25 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ver Proyectos</title>
   <style>
+    /* Estilo general */
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #FFF8DC; /* Fondo similar al color de la miel */
+      color: #333333;
     }
-    button {
-      margin: 10px;
-      padding: 10px;
-      font-size: 16px;
+
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #FF8C00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     }
+
+    /* Estilo para el contenedor de proyectos */
+    #contenedor-proyectos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
     .proyecto {
-      margin-bottom: 10px;
+      margin: 10px 0;
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #FFFFFF;
+      background-color: #FF8C00; /* Color de botón */
+      border-radius: 25px;
       cursor: pointer;
-      color: blue;
-      text-decoration: underline;
+      text-align: center;
+      width: 60%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, background-color 0.2s ease;
     }
-    .productos {
-      margin-top: 20px;
+
+    .proyecto:hover {
+      background-color: #FFA500; /* Más claro al pasar el mouse */
+      transform: translateY(-5px);
     }
+
+    /* Estilo para la sección de productos */
+    #productos-asociados {
+      background-color: #FFF4E1;
+      border: 2px solid #FF8C00;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #productos-asociados h3 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #FF8C00;
+    }
+
     .producto {
       margin-bottom: 10px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* Botón de volver */
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #FFFFFF;
+      background-color: #FF8C00;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #FFA500;
+      transform: translateY(-5px);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
@@ -33,6 +104,7 @@
   <!-- Contenedor donde se mostrarán los proyectos -->
   <div id="contenedor-proyectos"></div>
 
+  <!-- Sección para productos asociados -->
   <div id="productos-asociados" style="display:none;">
     <h3>Productos Asociados</h3>
     <ul id="lista-productos"></ul>
@@ -48,13 +120,13 @@
         .then(response => response.json())
         .then(proyectos => {
           const contenedorProyectos = document.getElementById('contenedor-proyectos');
-          contenedorProyectos.innerHTML = '';  // Limpiar contenido previo
+          contenedorProyectos.innerHTML = ''; // Limpiar contenido previo
 
           proyectos.forEach((proyecto, index) => {
             // Añadir el proyecto a la lista, cada uno como un enlace que se puede seleccionar
             const proyectoDiv = document.createElement('div');
             proyectoDiv.classList.add('proyecto');
-            proyectoDiv.innerHTML = `${proyecto.nombre}`;
+            proyectoDiv.textContent = proyecto.nombre;
             proyectoDiv.onclick = () => verProductos(proyecto, proyectos); // Al hacer clic en un proyecto, mostramos los productos
             contenedorProyectos.appendChild(proyectoDiv);
           });
@@ -67,7 +139,7 @@
     function verProductos(proyectoSeleccionado, proyectos) {
       // Limpiar productos anteriores antes de mostrar los nuevos
       const listaProductos = document.getElementById('lista-productos');
-      listaProductos.innerHTML = '';  // Limpiar la lista de productos
+      listaProductos.innerHTML = ''; // Limpiar la lista de productos
 
       // Encontrar el proyecto en el JSON
       const proyecto = proyectos.find(p => p.nombre === proyectoSeleccionado.nombre);
