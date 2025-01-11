@@ -1,84 +1,294 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pantalla de Inicio</title>
   <style>
+    /* Estilos generales */
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(to right, #FFD700, #eeb03e);
-      color: #333333;
       margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       height: 100vh;
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      color: #333333;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    .container {
+      display: flex;
+      width: 100%;
+    }
+
+    .sidebar {
+      width: 30%;
+      background-color: #f4f4f4;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 10px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      background-color: #fff;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar ul li:hover {
+      background-color: #e6e6e6;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .proyecto-detalle h2 {
+      margin-top: 0;
+    }
+
+    .acciones {
+      text-align: right;
     }
 
     button {
-      background-color: #FFD700;
-      color: #333333;
-      border: 2px solid #FFA500;
-      border-radius: 25px;
-      margin: 10px;
-      padding: 15px 30px;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .proyecto {
+      margin: 10px 0;
+      padding: 10px 20px;
       font-size: 18px;
       font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    button:hover {
-      transform: translateY(-5px);
-      background-color: #FFA500;
       color: #FFFFFF;
-    }
-
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Opcional: estilo adicional para darle un efecto hexagonal */
-    button {
-      clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    }
-
-    button:hover {
       background-color: #FF8C00;
+      border-radius: 25px;
+      cursor: pointer;
+      text-align: center;
+      width: 60%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .proyecto:hover {
+      background-color: #FFA500;
+      transform: translateY(-5px);
+    }
+
+    .producto {
+      margin-bottom: 10px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table th,
+    table td {
+      text-align: left;
+      padding: 12px;
+      font-size: 1rem;
+    }
+
+    table th {
+      background-color: #FFB800;
+      color: white;
+      font-weight: bold;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #FFF7D6;
+    }
+
+    table tr:hover {
+      background-color: #FFF3B3;
+    }
+
+    table,
+    th,
+    td {
+      border: 2px solid #FFB800;
     }
   </style>
-</head>
-<body>
-  <h1>Hola, Arahel. ¿Cómo procedemos?</h1>
 
-  <button onclick="irAProyecto()">Ver proyectos</button>
-  <button onclick="irAInventario()">Ver y agregar productos de inventario</button>
-  <button onclick="agregarProyecto()">Agregar Proyecto</button>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Menú lateral -->
+    <aside class="sidebar">
+      <h2>Proyectos</h2>
+      <div id="contenedor-proyectos"></div>
+      <div>
+        <button onclick="agregarProyecto()">Agregar</button>
+      </div>
+      <div>
+        <button onclick="irAInventario()">Inventario</button>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <div class="proyecto-detalle">
+        <h2 id="proyecto-nombre"></h2>
+        <table id="productos-tabla">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Modelo</th>
+              <th>Marca</th>
+            </tr>
+          </thead>
+          <tbody id="productos-asociados">
+            <!-- Sección para productos asociados -->
+          </tbody>
+        </table>
+      </div>
+      <div class="acciones">
+        <button id="editar-proyecto" onclick="editarProyecto()" disabled>Editar Proyecto</button>
+        <button id="eliminar-proyecto" onclick="eliminarProyecto()" disabled>Eliminar proyecto</button>
+      </div>
+    </main>
+  </div>
 
   <script>
-    function irAProyecto() {
-      window.location.href = 'proyectos.html'; // Redirigir a la página de proyectos
+    // Inicializar la página
+    window.onload = () => {
+      // Cargar proyectos desde el archivo JSON
+      fetch('proyectos.json')
+        .then(response => response.json())
+        .then(proyectos => {
+          const contenedorProyectos = document.getElementById('contenedor-proyectos');
+          contenedorProyectos.innerHTML = ''; // Limpiar contenido previo
+
+          proyectos.forEach((proyecto, index) => {
+            // Añadir el proyecto a la lista, cada uno como un enlace que se puede seleccionar
+            const proyectoDiv = document.createElement('div');
+            proyectoDiv.classList.add('proyecto');
+            proyectoDiv.textContent = proyecto.nombre;
+            proyectoDiv.onclick = () => verProductos(proyecto, proyectos); // Al hacer clic en un proyecto, mostramos los productos
+            contenedorProyectos.appendChild(proyectoDiv);
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar los proyectos:', error);
+        });
+
+      if (sessionStorage.getItem('nombreProyecto')) {
+        //botones se habilitan
+        document.getElementById('editar-proyecto').disabled = false;
+        document.getElementById('eliminar-proyecto').disabled = false;
+        const nombreProyectoSelec = sessionStorage.getItem('nombreProyecto');
+
+        fetch('proyectos.json')
+          .then(response => response.json())
+          .then(proyectos => {
+            const proyectoSeleccionado = proyectos.find(p => p.nombre === nombreProyectoSelec);
+            verProductos(proyectoSeleccionado, proyectos);
+            const tituloProyecto = document.getElementById('proyecto-nombre');
+            tituloProyecto.innerHTML = proyectoSeleccionado.nombre;
+          })
+      }
+    };
+
+    function editarProyecto() {
+      window.location.href = 'editarProyecto.html';
     }
 
-    function irAInventario() {
-      window.location.href = 'inventario.html'; // Redirigir a la página de inventario
+    function eliminarProyecto() {
+      if (confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
+        const nombreProyectoSelec = sessionStorage.getItem('nombreProyecto');
+
+        fetch('proyectos.json')
+          .then(response => response.json())
+          .then(proyectos => {
+            const proyectoSeleccionado = proyectos.find(p => p.nombre === nombreProyectoSelec);
+            window.electron.ipcRenderer.send('eliminar-proyecto', proyectoSeleccionado);
+            sessionStorage.removeItem('nombreProyecto');
+            window.location.href = 'index.html';
+          })
+          .catch(error => {
+            console.error('Error al cargar los proyectos:', error);
+          });
+      }
+
+
+    }
+
+
+
+    function verProductos(proyectoSeleccionado, proyectos) {
+
+      // Encontrar el proyecto en el JSON
+      const proyecto = proyectos.find(p => p.nombre === proyectoSeleccionado.nombre);
+
+      sessionStorage.setItem('nombreProyecto', proyectoSeleccionado.nombre);
+      const tituloProyecto = document.getElementById('proyecto-nombre');
+      tituloProyecto.innerHTML = proyectoSeleccionado.nombre;
+      //botones se habilitan
+      document.getElementById('editar-proyecto').disabled = false;
+      document.getElementById('eliminar-proyecto').disabled = false;
+
+      if (proyecto) {
+        // Mostrar los productos asociados al proyecto
+        const productosDiv = document.getElementById('productos-asociados');
+        productosDiv.innerHTML = ''; // Limpiar tabla
+        productosDiv.style.display = proyecto.productos.length ? 'block' : 'none';
+
+        proyecto.productos.forEach((producto) => {
+          const productoLi = document.createElement('tr');
+          productoLi.innerHTML = `
+            <td>${producto.item}</td>
+            <td>${producto.modelo}</td>
+            <td>${producto.marca}</td>
+          `;
+          productosDiv.appendChild(productoLi);
+        });
+      }
     }
 
     function agregarProyecto() {
-      window.location.href = 'agregarProyecto.html'; // Redirigir a la pantalla de agregar proyecto
+      window.location.href = 'agregarProyecto.html';
     }
+
+    function irAInventario() {
+      window.location.href = 'inventario.html';
+    }
+
   </script>
 </body>
+
 </html>

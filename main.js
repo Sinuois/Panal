@@ -75,6 +75,65 @@ ipcMain.on('guardar-inventario', (event, productosConNuevo) => {
   });
 });
 
+// Escuchar el evento de actualizar proyecto
+ipcMain.on('actualizar-proyecto', (event, proyectoActual) => {
+  fs.readFile('proyectos.json', (err, data) => {
+    if (err) {
+      console.error('Error al leer proyectos.json:', err);
+      return;
+    }
+    // Leer el archivo de proyectos
+    let proyectos = JSON.parse(data);
+    // Buscar el índice del proyecto a actualizar por nombre
+    const index = proyectos.findIndex(p => p.nombre === proyectoActual.nombre);
+    if (index === -1) {
+      console.error('No se encontró un proyecto con el nombre:', proyectoActual.nombre);
+      return;
+    }
+    // Actualizar el proyecto
+    proyectos[index] = proyectoActual;
+
+    // Guardar el archivo con el proyecto actualizado
+    fs.writeFile('proyectos.json', JSON.stringify(proyectos, null, 2), (err) => {
+      if (err) {
+        console.error('Error al guardar proyectos.json:', err);
+        return;
+      }
+      console.log(`Proyecto "${proyectoActual.nombre}" actualizado exitosamente.`);
+    });
+  });
+});
+
+ipcMain.on('eliminar-proyecto', (event, proyectoActual) => {
+  fs.readFile('proyectos.json', (err, data) => {
+    if (err) {
+      console.error('Error al leer proyectos.json:', err);
+      return;
+    }
+    // Leer el archivo de proyectos
+    let proyectos = JSON.parse(data);
+    // Buscar el índice del proyecto a eliminar por nombre
+    const index = proyectos.findIndex(p => p.nombre === proyectoActual.nombre);
+    if (index === -1) {
+      console.error('No se encontró un proyecto con el nombre:', proyectoActual.nombre);
+      return;
+    }
+    // Eliminar el proyecto
+    proyectos.splice(index, 1);
+
+    // Guardar el archivo con el proyecto eliminado
+    fs.writeFile('proyectos.json', JSON.stringify(proyectos, null, 2), (err) => {
+      if (err) {
+        console.error('Error al guardar proyectos.json:', err);
+        return;
+      }
+      console.log(`Proyecto "${proyectoActual.nombre}" eliminado exitosamente.`);
+    })
+  })
+})
+
+
+
 app.whenReady().then(() => {
   createWindow();
   app.on('activate', () => {

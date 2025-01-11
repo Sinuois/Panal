@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     send: (channel, data) => {
       // Define los canales permitidos
-      const validChannels = ['guardar-inventario', 'agregar-proyecto'];
+      const validChannels = ['guardar-inventario', 'agregar-proyecto', 'actualizar-proyecto', 'eliminar-proyecto'];
       if (validChannels.includes(channel)) {
         ipcRenderer.send(channel, data);
       }

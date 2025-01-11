@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Proyecto</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #FFFAE6;
+      color: #5B3E16;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #FF8C00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    button {
+      background-color: #FFB800;
+      color: #FFF;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #FF9D00;
+    }
+
+    #edit-project-form {
+      background-color: #FFF;
+      padding: 15px;
+      border: 2px solid #FFB800;
+      border-radius: 8px;
+      margin: 20px auto;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      max-width: 1000px;
+    }
+
+    div.scrollable-container {
+      background-color: #FFF3B3;
+      height: 400px;
+      overflow: scroll;
+      max-width: 1000px;
+    }
+
+    #productos-lista div {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Editar Proyecto</h1>
+
+  <div id="edit-project-form">
+    <h3>Proyecto: <span id="nombre-proyecto"></span></h3>
+    <h3>Edita los productos asociados:</h3>
+    <div class="scrollable-container">
+      <div id="productos-lista"></div>
+    </div>
+    <div style="margin: 10px; display: flex; justify-content: flex-end">
+      <button onclick="guardarCambios()">Guardar Cambios</button>
+      <button style="margin-left: 10px;" onclick="window.location.href='index.html'">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    let inventario = [];
+    let proyectoActual = null;
+
+    // Cargar el proyecto y el inventario
+    window.onload = () => {
+      // Obtener el proyecto actual desde el contexto (puede venir como query param)
+      const nombreProyectoSelec = sessionStorage.getItem('nombreProyecto');
+
+      fetch('proyectos.json')
+        .then(response => response.json())
+        .then(proyectos => {
+          const proyecto = proyectos.find(p => p.nombre === nombreProyectoSelec);
+          proyectoActual = proyecto;
+          document.getElementById('nombre-proyecto').textContent = proyecto.nombre;
+
+          // Cargar inventario
+          return fetch('inventario.json');
+        })
+        .then(response => response.json())
+        .then(data => {
+          inventario = data;
+          const productosLista = document.getElementById('productos-lista');
+          productosLista.innerHTML = '';
+
+          inventario.forEach((producto, index) => {
+            const isChecked = proyectoActual.productos.some(p => 
+              p.item === producto.item && 
+              p.modelo === producto.modelo && 
+              p.marca === producto.marca
+            );
+
+            const productoDiv = document.createElement('div');
+            productoDiv.innerHTML = `
+              <input type="checkbox" id="producto-${index}" value="${index}" ${isChecked ? 'checked' : ''}>
+              <label for="producto-${index}">${producto.item} (${producto.modelo}, ${producto.marca})</label>
+            `;
+            productosLista.appendChild(productoDiv);
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar los datos:', error);
+        });
+    };
+
+    function guardarCambios() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      const productosSeleccionados = [];
+
+      checkboxes.forEach(checkbox => {
+        const index = checkbox.value;
+        productosSeleccionados.push({
+          item: inventario[index].item,
+          modelo: inventario[index].modelo,
+          marca: inventario[index].marca
+        });
+      });
+
+      // Actualizar el proyecto actual
+      proyectoActual.productos = productosSeleccionados;
+
+      // Guardar los cambios
+      window.electron.ipcRenderer.send('actualizar-proyecto', proyectoActual);
+
+      // Volver a la pantalla principal
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+
+</html>
