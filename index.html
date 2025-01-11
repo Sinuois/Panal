@@ -4,12 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <title>Pantalla de Inicio</title>
   <style>
     /* Estilos generales */
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      /* Fondo oscuro */
+      color: #E0E0E0;
+      /* Texto claro */
       display: flex;
       height: 100vh;
     }
@@ -19,16 +24,27 @@
       width: 100%;
     }
 
+    /* Menú lateral */
     .sidebar {
-      width: 30%;
-      background-color: #f4f4f4;
+      width: 20%;
+      /* Menú lateral más estrecho */
+      background-color: #1E1E1E;
+      /* Fondo oscuro para el sidebar */
+      color: #B0B0B0;
+      /* Color de texto del sidebar */
       padding: 20px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .sidebar h2 {
       margin-top: 0;
+      color: #ffffff;
+      font-size: 1.5rem;
+      padding-bottom: 20px;
     }
 
     .sidebar ul {
@@ -37,111 +53,224 @@
     }
 
     .sidebar ul li {
-      padding: 10px;
+      padding: 12px;
       cursor: pointer;
-      border: 1px solid #ddd;
-      margin-bottom: 10px;
-      background-color: #fff;
-      transition: background-color 0.3s ease;
+      background-color: #333333;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
     }
 
     .sidebar ul li:hover {
-      background-color: #e6e6e6;
+      background-color: #555555;
+      transform: scale(1.05);
+    }
+
+    .sidebar ul li i {
+      margin-right: 10px;
     }
 
     .main-content {
       flex: 1;
-      padding: 20px;
+      padding: 30px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+      background-color: #181818;
+      overflow-y: auto;
+    }
+
+    .proyecto-detalle {
+      overflow-y: auto;
+      height: 70%;
     }
 
     .proyecto-detalle h2 {
       margin-top: 0;
+      color: #ffffff;
+      
     }
 
     .acciones {
       text-align: right;
+      position: absolute;
+      right: 20px;
+      bottom: 40px;
     }
 
-    button {
-      padding: 10px 15px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
 
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-
+    /* Botones estilizados */
     .proyecto {
-      margin: 10px 0;
-      padding: 10px 20px;
+      margin: 12px 0;
+      padding: 12px 20px;
       font-size: 18px;
       font-weight: bold;
-      color: #FFFFFF;
-      background-color: #FF8C00;
+      color: #E0E0E0;
+      background-color: transparent;
+      border: 2px solid #5466ef;
       border-radius: 25px;
       cursor: pointer;
       text-align: center;
-      width: 60%;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease, background-color 0.2s ease;
+      width: 90%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+      display: inline-block;
+      text-decoration: none;
     }
 
     .proyecto:hover {
-      background-color: #FFA500;
-      transform: translateY(-5px);
+      background-color: #7584f6;
+      color: #FFFFFF;
+      transform: translateY(-8px);
     }
 
-    .producto {
-      margin-bottom: 10px;
-      font-size: 16px;
-      line-height: 1.6;
+    .proyecto:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(244, 166, 97, 0.7);
     }
 
+    /* Tabla estilizada */
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 20px 0;
+      background-color: #333333;
+      border-radius: 8px;
+      overflow: hidden;
+      table-layout: fixed;
     }
 
     table th,
     table td {
       text-align: left;
-      padding: 12px;
+      padding: 15px;
       font-size: 1rem;
+      color: #E0E0E0;
+      border: 1px solid #555555;
+      /* Borde sutil */
+
     }
 
     table th {
-      background-color: #FFB800;
-      color: white;
+      background-color: #333333;
       font-weight: bold;
+      text-align: center;
+      padding-left: 10px;
+      padding-right: 10px;
+      width: 50%;
+    }
+
+    table td {
+      text-align: left;
+      padding-left: 10px;
+      padding-right: 10px;
+      width: 50%;
     }
 
     table tr:nth-child(even) {
-      background-color: #FFF7D6;
+      background-color: #444444;
     }
 
     table tr:hover {
-      background-color: #FFF3B3;
+      background-color: #555555;
     }
 
-    table,
-    th,
-    td {
-      border: 2px solid #FFB800;
+    /* Estilos adicionales para botones de acción */
+    .acciones button {
+      margin-top: 15px;
+      display: inline-block;
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      
     }
+
+    .acciones button:hover {
+      background-image: linear-gradient(rgb(0 0 0/40%) 0 0);
+    }
+
+    .acciones button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      display: none;
+    }
+
+    .ir-inventario {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+      width: 15%;
+      margin-top: 20px;
+      position: relative;
+      left: 85%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .ir-inventario:hover {
+      background-color: #0056b3;
+    }
+
+    .agregar-proyecto {
+      width: 50px;
+      height: 50px;
+      background-color: #4d4dcc;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      position: relative;
+      left: 80%
+    }
+
+    .agregar-proyecto:hover {
+      background-color: #6a8ded;
+      transform: translateY(-8px);
+    }
+
+    .proyecto {
+      margin: 12px 0;
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #E0E0E0;
+      background-color: transparent;
+      border: 2px solid #5466ef;
+      border-radius: 25px;
+      cursor: pointer;
+      text-align: center;
+      width: 80%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .proyecto:hover {
+      background-color: #7584f6;
+      color: #FFFFFF;
+      transform: translateY(-8px);
+    }
+
+    .proyecto:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(244, 166, 97, 0.7);
+    }
+
   </style>
 
 </head>
@@ -151,20 +280,17 @@
     <!-- Menú lateral -->
     <aside class="sidebar">
       <h2>Proyectos</h2>
-      <div id="contenedor-proyectos"></div>
-      <div>
-        <button onclick="agregarProyecto()">Agregar</button>
-      </div>
-      <div>
-        <button onclick="irAInventario()">Inventario</button>
-      </div>
+      <div id="contenedor-proyectos" style="overflow-y: auto; max-height: 600px;"></div>
+      <button class="agregar-proyecto" onclick="agregarProyecto()"><i class="fas fa-plus"></i></button>
+      
     </aside>
 
     <!-- Contenido principal -->
     <main class="main-content">
+      <button class="ir-inventario" onclick="irAInventario()"><i class="fas fa-box"></i> Ir al Inventario</button>
+      <h2 id="proyecto-nombre"></h2>
       <div class="proyecto-detalle">
-        <h2 id="proyecto-nombre"></h2>
-        <table id="productos-tabla">
+        <table id="productos-asociados" style="width: 100%; table-layout: fixed;">
           <thead>
             <tr>
               <th>Item</th>
@@ -172,14 +298,16 @@
               <th>Marca</th>
             </tr>
           </thead>
-          <tbody id="productos-asociados">
+          <tbody>
             <!-- Sección para productos asociados -->
           </tbody>
         </table>
       </div>
       <div class="acciones">
-        <button id="editar-proyecto" onclick="editarProyecto()" disabled>Editar Proyecto</button>
-        <button id="eliminar-proyecto" onclick="eliminarProyecto()" disabled>Eliminar proyecto</button>
+        <button id="editar-proyecto" style="background-color: #007bff;" onclick="editarProyecto()" disabled><i class="fas fa-edit"></i> Editar
+          Proyecto</button>
+        <button id="eliminar-proyecto" style="background-color: #c41616;" onclick="eliminarProyecto()" disabled><i class="fas fa-trash"></i> Eliminar
+          Proyecto</button>
       </div>
     </main>
   </div>
@@ -206,7 +334,8 @@
         .catch(error => {
           console.error('Error al cargar los proyectos:', error);
         });
-
+      const tituloProyecto = document.getElementById('proyecto-nombre');
+      tituloProyecto.innerHTML = "Seleccione un proyecto";
       if (sessionStorage.getItem('nombreProyecto')) {
         //botones se habilitan
         document.getElementById('editar-proyecto').disabled = false;
@@ -218,7 +347,7 @@
           .then(proyectos => {
             const proyectoSeleccionado = proyectos.find(p => p.nombre === nombreProyectoSelec);
             verProductos(proyectoSeleccionado, proyectos);
-            const tituloProyecto = document.getElementById('proyecto-nombre');
+
             tituloProyecto.innerHTML = proyectoSeleccionado.nombre;
           })
       }
@@ -265,7 +394,11 @@
       if (proyecto) {
         // Mostrar los productos asociados al proyecto
         const productosDiv = document.getElementById('productos-asociados');
-        productosDiv.innerHTML = ''; // Limpiar tabla
+        productosDiv.innerHTML = `            <tr>
+              <th>Item</th>
+              <th>Modelo</th>
+              <th>Marca</th>
+            </tr>`; // Limpiar tabla
         productosDiv.style.display = proyecto.productos.length ? 'block' : 'none';
 
         proyecto.productos.forEach((producto) => {
