@@ -357,8 +357,9 @@
       window.location.href = 'editarProyecto.html';
     }
 
-    function eliminarProyecto() {
-      if (confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
+    async function eliminarProyecto() {
+      const confirmed = await window.electron.dialog.confirm('¿Estás seguro de que deseas eliminar este proyecto?');
+      if (confirmed) {
         const nombreProyectoSelec = sessionStorage.getItem('nombreProyecto');
 
         fetch('proyectos.json')
@@ -373,8 +374,6 @@
             console.error('Error al cargar los proyectos:', error);
           });
       }
-
-
     }
 
 

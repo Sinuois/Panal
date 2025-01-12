@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -15,6 +15,24 @@ function createWindow() {
 
   mainWindow.loadFile('index.html');
 }
+
+// Manejar el diálogo de mensaje
+ipcMain.handle('show-message-box', async (event, options) => {
+  const result = await dialog.showMessageBox(mainWindow, options); // Cambia ventana por mainWindow
+  return result;
+});
+
+// Manejar el diálogo de confirmación
+ipcMain.handle('show-confirm-dialog', async (event, message) => {
+  const result = await dialog.showMessageBox(mainWindow, {
+    type: 'question',
+    buttons: ['Sí', 'No'],
+    defaultId: 1,
+    title: 'Confirmación',
+    message: message
+  });
+  return result.response === 0;  // Retorna 'true' si 'Sí' fue seleccionado, 'false' si 'No'
+});
 
 // Leer inventario desde inventario.json
 ipcMain.on('obtener-productos', (event) => {
@@ -56,7 +74,7 @@ ipcMain.on('agregar-proyecto', (event, nuevoProyecto) => {
   });
 });
 
-// Escuchar el evento de agregar proyecto
+// Escuchar el evento de guardar inventario
 ipcMain.on('guardar-inventario', (event, productosConNuevo) => {
   fs.readFile('inventario.json', (err, data) => {
     if (err) {
@@ -104,6 +122,7 @@ ipcMain.on('actualizar-proyecto', (event, proyectoActual) => {
   });
 });
 
+// Escuchar el evento de eliminar proyecto
 ipcMain.on('eliminar-proyecto', (event, proyectoActual) => {
   fs.readFile('proyectos.json', (err, data) => {
     if (err) {
@@ -131,8 +150,6 @@ ipcMain.on('eliminar-proyecto', (event, proyectoActual) => {
     })
   })
 })
-
-
 
 app.whenReady().then(() => {
   createWindow();

@@ -94,7 +94,7 @@
     </div>
     <div style="margin: 10px; display: flex; justify-content: flex-end">
       <button onclick="guardarProyecto()">Guardar Proyecto</button>
-      
+
       <button style="margin-left: 10px;" onclick="window.location.href='index.html'">Volver</button>
     </div>
 
@@ -102,6 +102,7 @@
   </div>
 
   <script>
+
     let inventario = [];  // Variable global para almacenar el inventario
 
     window.onload = () => {
@@ -129,35 +130,81 @@
 
     function guardarProyecto() {
       const nombreProyecto = document.getElementById('nombre-proyecto').value;
+
+      // Validar que se ingrese un nombre para el proyecto
       if (!nombreProyecto) {
-        alert('Por favor, ingresa un nombre para el proyecto.');
+        window.electron.dialog.showMessageBox({
+          type: 'warning',
+          title: 'Advertencia',
+          message: 'Por favor, ingresa un nombre para el proyecto.',
+          buttons: ['Aceptar'],
+        }).then(() => {
+          console.log('El usuario cerró el mensaje.');
+        });
         return;
       }
 
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-      const productosSeleccionados = [];
-
-      checkboxes.forEach(checkbox => {
-        const index = checkbox.value;
-        // Guardamos el producto seleccionado en el array
-        productosSeleccionados.push({
-          item: inventario[index].item,
-          modelo: inventario[index].modelo,
-          marca: inventario[index].marca
+      // Verificar si hay productos seleccionados
+      if (document.querySelectorAll('input[type="checkbox"]:checked').length === 0) {
+        window.electron.dialog.showMessageBox({
+          type: 'warning',
+          title: 'Advertencia',
+          message: 'Por favor, seleccione al menos un producto.',
+          buttons: ['Aceptar'],
+        }).then(() => {
+          console.log('El usuario cerró el mensaje.');
         });
-      });
+        return;
+      }
 
-      const nuevoProyecto = {
-        nombre: nombreProyecto,
-        productos: productosSeleccionados
-      };
+      // Realizar la verificación con fetch
+      fetch('proyectos.json')
+        .then(response => response.json())
+        .then(proyectos => {
+          // Verificar si el proyecto ya existe
+          const proyectoYaExistente = proyectos.find(p => p.nombre === nombreProyecto);
+          if (proyectoYaExistente) {
+            window.electron.dialog.showMessageBox({
+              type: 'warning',
+              title: 'Advertencia',
+              message: 'Ya existe un proyecto con el mismo nombre.',
+              buttons: ['Aceptar'],
+            }).then(() => {
+              console.log('El usuario cerró el mensaje.');
+            });
+            return;
+          }
 
-      // Guardar el nuevo proyecto en proyectos.json
-      window.electron.ipcRenderer.send('agregar-proyecto', nuevoProyecto);
+          // Crear el nuevo proyecto si no existe uno con el mismo nombre
+          const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+          const productosSeleccionados = [];
 
-      // Redirigir a la pantalla principal después de agregar el proyecto
-      window.location.href = 'index.html';
+          checkboxes.forEach(checkbox => {
+            const index = checkbox.value;
+            // Guardamos el producto seleccionado en el array
+            productosSeleccionados.push({
+              item: inventario[index].item,
+              modelo: inventario[index].modelo,
+              marca: inventario[index].marca
+            });
+          });
+
+          const nuevoProyecto = {
+            nombre: nombreProyecto,
+            productos: productosSeleccionados
+          };
+
+          // Guardar el nuevo proyecto en proyectos.json
+          window.electron.ipcRenderer.send('agregar-proyecto', nuevoProyecto);
+
+          // Redirigir a la pantalla principal después de agregar el proyecto
+          window.location.href = 'index.html';
+        })
+        .catch(error => {
+          console.error('Error al cargar los proyectos:', error);
+        });
     }
+
 
   </script>
 </body>

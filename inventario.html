@@ -258,7 +258,14 @@
       const marca = document.getElementById('new-marca').value;
 
       if (!cantidad || !item || !modelo || !marca) {
-        alert('Por favor, completa todos los campos.');
+        window.electron.dialog.showMessageBox({
+          type: 'warning',
+          title: 'Advertencia',
+          message: 'Por favor, llene todos los campos.',
+          buttons: ['Aceptar'],
+        }).then(() => {
+          console.log('El usuario cerró el mensaje.');
+        });
         return;
       }
 
@@ -305,7 +312,14 @@
 
       // Verificar que todos los campos estén completos
       if (!cantidad || !item || !modelo || !marca) {
-        alert('Por favor, completa todos los campos.');
+        window.electron.dialog.showMessageBox({
+          type: 'warning',
+          title: 'Advertencia',
+          message: 'Por favor, llene todos los campos.',
+          buttons: ['Aceptar'],
+        }).then(() => {
+          console.log('El usuario cerró el mensaje.');
+        });
         return;
       }
 
@@ -332,13 +346,15 @@
 
 
     // Función para eliminar un producto
-    function eliminarProducto(index) {
-      if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+    async function eliminarProducto(index) {
+      const confirmed = await window.electron.dialog.confirm('¿Estás seguro de que deseas eliminar este producto?');
+      if (confirmed) {
         inventario.splice(index, 1);
         guardarInventario();
         actualizarTabla();
       }
     }
+
 
     // Guardar inventario en el archivo JSON
     function guardarInventario() {
@@ -350,7 +366,14 @@
         });
 
         window.electron.ipcRenderer.once('guardar-inventario-error', (message) => {
-          alert('Error al guardar el inventario: ' + message);
+          window.electron.dialog.showMessageBox({
+            type: 'error',
+            title: 'Error',
+            message: 'Ocurrió un error al guardar el inventario.',
+            buttons: ['Aceptar'],
+          }).then(() => {
+            console.log('El usuario cerró el mensaje.');
+          });
         });
       } else {
         console.warn('Electron no está disponible.');
@@ -374,7 +397,7 @@
         tablaContainer.style.height = 'auto';
         button.classList.remove('fa-plus');
         button.classList.add('fa-minus');
-        
+
       }
     }
 
