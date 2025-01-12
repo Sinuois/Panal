@@ -14,7 +14,13 @@ function createWindow() {
   });
 
   mainWindow.loadFile('index.html');
+
+  // Maximiza la ventana después de cargar el archivo
+  mainWindow.maximize();
 }
+
+
+
 
 // Manejar el diálogo de mensaje
 ipcMain.handle('show-message-box', async (event, options) => {

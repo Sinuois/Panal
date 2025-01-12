@@ -11,23 +11,24 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #FFFAE6;
-      /* Fondo con tono crema */
-      color: #5B3E16;
-      /* Color marrón para texto */
-      margin: 0;
+      background-color: #1E1E1E;
+      color: #F1F1F1;
+      margin: 20px;
+      /* Márgenes alrededor */
       padding: 0;
     }
 
     h1 {
       font-size: 2.5em;
       margin-bottom: 20px;
-      color: #FF8C00;
+      color: #0066CC;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      /* Título centrado */
     }
 
     button {
-      background-color: #FFB800;
+      background-color: #0066CC;
       color: #FFF;
       border: none;
       border-radius: 4px;
@@ -38,14 +39,14 @@
     }
 
     button:hover {
-      background-color: #FF9D00;
+      background-color: #004C99;
     }
 
     #add-product-form,
     #modalEdicion {
-      background-color: #FFF;
+      background-color: #2E2E2E;
       padding: 15px;
-      border: 2px solid #FFB800;
+      border: 2px solid #0066CC;
       border-radius: 8px;
       margin: 20px auto;
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
@@ -57,7 +58,7 @@
       width: calc(100% - 20px);
       padding: 10px;
       margin-bottom: 10px;
-      border: 2px solid #FFB800;
+      border: 2px solid #0066CC;
       border-radius: 4px;
       font-size: 1rem;
     }
@@ -76,31 +77,23 @@
     }
 
     table th {
-      background-color: #FFB800;
+      background-color: #0066CC;
       color: white;
       font-weight: bold;
     }
 
     table tr:nth-child(even) {
-      background-color: #FFF7D6;
+      background-color: #333333;
     }
 
     table tr:hover {
-      background-color: #FFF3B3;
+      background-color: #444444;
     }
 
     table,
     th,
     td {
-      border: 2px solid #FFB800;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      color: #FF8C00;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      border: 2px solid #0066CC;
     }
 
     #modalEdicion {
@@ -115,7 +108,7 @@
 
     #modalEdicion h3 {
       text-align: center;
-      color: #5B3E16;
+      color: #F1F1F1;
     }
 
     #modalEdicion button {
@@ -135,17 +128,15 @@
     }
 
     .edit-icon {
-      color: #2E86C1;
-      /* Azul elegante */
+      color: #0066CC;
     }
 
     .edit-icon:hover {
-      color: #1A5276;
+      color: #004C99;
     }
 
     .delete-icon {
       color: #E74C3C;
-      /* Rojo vibrante */
     }
 
     .delete-icon:hover {
@@ -157,9 +148,6 @@
 <body>
 
   <h1>Inventario</h1>
-
-
-
 
   <!-- Tabla de inventario -->
   <div id="tabla-container" style="overflow: hidden; height: 200px; transition: height 0.3s ease;">
@@ -178,6 +166,7 @@
       </tbody>
     </table>
   </div>
+
   <!-- Botón para colapsar/descolapsar la tabla -->
   <div style="margin: 10px; display: flex; justify-content: flex-end">
     <i id="toggle-table" class="fa fa-plus action-icon edit-icon" onclick="toggleTable()"></i>

@@ -8,10 +8,8 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #FFFAE6;
-      /* Fondo con tono crema */
-      color: #5B3E16;
-      /* Color marrón para texto */
+      background-color: #121212; /* Fondo oscuro */
+      color: #E0E0E0; /* Texto en gris claro */
       margin: 0;
       padding: 0;
     }
@@ -19,13 +17,13 @@
     h1 {
       font-size: 2.5em;
       margin-bottom: 20px;
-      color: #FF8C00;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      color: #2196F3; /* Azul vibrante */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
       text-align: center;
     }
 
     button {
-      background-color: #FFB800;
+      background-color: #246aa2; 
       color: #FFF;
       border: none;
       border-radius: 4px;
@@ -36,16 +34,16 @@
     }
 
     button:hover {
-      background-color: #FF9D00;
+      background-color: #1976D2; /* Azul más oscuro */
     }
 
     #add-project-form {
-      background-color: #FFF;
+      background-color: #1F1F1F; /* Fondo oscuro del formulario */
       padding: 15px;
-      border: 2px solid #FFB800;
+      border: 2px solid #2196F3; /* Azul del borde */
       border-radius: 8px;
       margin: 20px auto;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
       max-width: 1000px;
     }
 
@@ -53,13 +51,19 @@
       width: calc(100% - 20px);
       padding: 10px;
       margin-bottom: 10px;
-      border: 2px solid #FFB800;
+      border: 2px solid #2196F3; /* Azul en el borde */
       border-radius: 4px;
       font-size: 1rem;
+      background-color: #2C2C2C; /* Fondo oscuro en el input */
+      color: #ffffff; /* Color de texto claro */
+    }
+
+    #input-nombre input:focus {
+      border-color: #1976D2; /* Azul al hacer foco */
     }
 
     #project-list li:hover {
-      background-color: #FFF3B3;
+      background-color: #333; /* Fondo oscuro en hover */
     }
 
     .action-icon {
@@ -73,10 +77,11 @@
     }
 
     div.scrollable-container {
-      background-color: #FFF3B3;
+      background-color: #333; /* Fondo oscuro */
       height: 400px;
-      overflow: scroll;
+      overflow-y: auto;
       max-width: 1000px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -88,7 +93,7 @@
     <div id="input-nombre">
       <input type="text" id="nombre-proyecto" placeholder="Ingresa el nombre del proyecto" required>
     </div>
-    <h3>Selecciona los productos asociados:</h3>
+    <h3 style="color: #2196F3;">Selecciona los productos asociados:</h3>
     <div class="scrollable-container">
       <div id="productos-lista"></div>
     </div>
@@ -97,8 +102,6 @@
 
       <button style="margin-left: 10px;" onclick="window.location.href='index.html'">Volver</button>
     </div>
-
-
   </div>
 
   <script>
@@ -118,7 +121,7 @@
             const productoDiv = document.createElement('div');
             productoDiv.innerHTML = `
               <input type="checkbox" id="producto-${index}" value="${index}">
-              <label for="producto-${index}">${producto.item} (${producto.modelo}, ${producto.marca})</label>
+              <label for="producto-${index}" style="color: #E0E0E0;">${producto.item} (${producto.modelo}, ${producto.marca})</label>
             `;
             productosLista.appendChild(productoDiv);
           });
@@ -204,7 +207,6 @@
           console.error('Error al cargar los proyectos:', error);
         });
     }
-
 
   </script>
 </body>
