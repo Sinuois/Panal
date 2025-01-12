@@ -101,9 +101,9 @@
           productosLista.innerHTML = '';
 
           inventario.forEach((producto, index) => {
-            const isChecked = proyectoActual.productos.some(p => 
-              p.item === producto.item && 
-              p.modelo === producto.modelo && 
+            const isChecked = proyectoActual.productos.some(p =>
+              p.item === producto.item &&
+              p.modelo === producto.modelo &&
               p.marca === producto.marca
             );
 
@@ -121,6 +121,20 @@
     };
 
     function guardarCambios() {
+
+      // Verificar si hay productos seleccionados
+      if (document.querySelectorAll('input[type="checkbox"]:checked').length === 0) {
+        window.electron.dialog.showMessageBox({
+          type: 'warning',
+          title: 'Advertencia',
+          message: 'Por favor, seleccione al menos un producto.',
+          buttons: ['Aceptar'],
+        }).then(() => {
+          console.log('El usuario cerró el mensaje.');
+        });
+        return;
+      }
+
       const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
       const productosSeleccionados = [];
 

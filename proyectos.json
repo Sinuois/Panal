@@ -1,35 +1,5 @@
 [
   {
-    "nombre": "Proyecto A",
-    "productos": [
-      {
-        "item": "CAMARA",
-        "modelo": "FX30",
-        "marca": "SONY"
-      },
-      {
-        "item": "MICROFONO",
-        "modelo": "Yeti",
-        "marca": "Blue"
-      }
-    ]
-  },
-  {
-    "nombre": "Proyecto B",
-    "productos": [
-      {
-        "item": "LÁMPARA",
-        "modelo": "Softbox",
-        "marca": "Godox"
-      },
-      {
-        "item": "TRÍPODE",
-        "modelo": "190XPRO3",
-        "marca": "Manfrotto"
-      }
-    ]
-  },
-  {
     "nombre": "Mocars",
     "productos": [
       {
@@ -48,64 +18,14 @@
     "nombre": "TPL",
     "productos": [
       {
-        "item": "MICROFONO",
-        "modelo": "Yeti",
-        "marca": "Blue"
+        "item": "CAMARA",
+        "modelo": "FX30",
+        "marca": "SONY"
       },
       {
-        "item": "LÁMPARA",
-        "modelo": "Softbox",
-        "marca": "Godox"
-      },
-      {
-        "item": "TRÍPODE",
-        "modelo": "190XPRO3",
-        "marca": "Manfrotto"
-      }
-    ]
-  },
-  {
-    "nombre": "Toyota",
-    "productos": [
-      {
-        "item": "SACO DE ARENA",
-        "modelo": null,
-        "marca": "GENERICO"
-      },
-      {
-        "item": "TRES MEDIDAS",
-        "modelo": null,
-        "marca": "GENERICO"
-      },
-      {
-        "item": "INVERSOR 300W",
-        "modelo": "300W",
-        "marca": "GENERICO"
-      },
-      {
-        "item": "INVERSOR 2000W",
-        "modelo": "2000W",
-        "marca": "GENERICO"
-      }
-    ]
-  },
-  {
-    "nombre": "Montenegro",
-    "productos": [
-      {
-        "item": "CARDELLINI 4'' END JAW+ BABY RECEIVER",
-        "modelo": "KCP 600",
-        "marca": "KUPO"
-      },
-      {
-        "item": "CARDELLINI 9'' END JAW",
-        "modelo": "KCP 607",
-        "marca": "KUPO"
-      },
-      {
-        "item": "SUPERCLAMP GRIPHEAD",
-        "modelo": "D230",
-        "marca": "AVENGER"
+        "item": "TARJETA CF EXPRESS B 80GB",
+        "modelo": "THOUGH CF EXPRESS TYPE B",
+        "marca": "SONY"
       }
     ]
   }
