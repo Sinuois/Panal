@@ -8,9 +8,64 @@
         "marca": "SONY"
       },
       {
-        "item": "MICROFONO",
-        "modelo": "Yeti",
-        "marca": "Blue"
+        "item": "TARJETA CF EXPRESS B 80GB",
+        "modelo": "THOUGH CF EXPRESS TYPE B",
+        "marca": "SONY"
+      },
+      {
+        "item": "TARJETA SD 64 GB",
+        "modelo": "THOUGH SD 64GB",
+        "marca": "SONY"
+      },
+      {
+        "item": "TARJETA SD 64GB",
+        "modelo": "SD",
+        "marca": "SONY"
+      },
+      {
+        "item": "TARJETA SD 64GB",
+        "modelo": "SD",
+        "marca": "LEXAR"
+      },
+      {
+        "item": "LECTOR TARJETA CF EXPRESS TYPE B & SD",
+        "modelo": "MRW-G2",
+        "marca": "SONY"
+      },
+      {
+        "item": "HDMI",
+        "modelo": "HDMI",
+        "marca": "GENERICO"
+      },
+      {
+        "item": "CAGE CAMARA",
+        "modelo": "4183",
+        "marca": "SMALLRIG"
+      },
+      {
+        "item": "MODULO EXPANCION CINEBACK",
+        "modelo": "FUSIONRIG FX30",
+        "marca": "FUSIONRIG"
+      },
+      {
+        "item": "HANDLE",
+        "modelo": "HANDLE",
+        "marca": "GENERICO"
+      },
+      {
+        "item": "USB A-USB C",
+        "modelo": "USB C",
+        "marca": "GENERICO"
+      },
+      {
+        "item": "MONITOR 5.5''",
+        "modelo": "F5 PRO X",
+        "marca": "FEELWORLD"
+      },
+      {
+        "item": "DTAP TO BARREL",
+        "modelo": "ALIMENTACION",
+        "marca": "GENERICO"
       }
     ]
   },

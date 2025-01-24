@@ -89,7 +89,7 @@
     .proyecto-detalle h2 {
       margin-top: 0;
       color: #ffffff;
-      
+
     }
 
     .acciones {
@@ -187,7 +187,7 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      
+
     }
 
     .acciones button:hover {
@@ -198,6 +198,30 @@
       background-color: #ccc;
       cursor: not-allowed;
       display: none;
+    }
+
+    .generar-informe {
+      background-color: #217346 ;
+      margin-top: 15px;
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      right: 300px;
+      bottom: 8px;
+      display: inline-block;
+    }
+
+    .generar-informe:hover {
+      background-color: #35b06c;
+      transform: translateY(-8px);
     }
 
     .ir-inventario {
@@ -219,6 +243,12 @@
       background-color: #0056b3;
     }
 
+    .generales {
+      position: relative;
+      display: flex;
+      left: 80%
+    }
+
     .agregar-proyecto {
       width: 50px;
       height: 50px;
@@ -227,14 +257,13 @@
       border: none;
       border-radius: 50%;
       font-size: 24px;
-      display: flex;
+
       justify-content: center;
       align-items: center;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease, background-color 0.3s ease;
-      position: relative;
-      left: 80%
+
     }
 
     .agregar-proyecto:hover {
@@ -270,7 +299,6 @@
       outline: none;
       box-shadow: 0 0 10px rgba(244, 166, 97, 0.7);
     }
-
   </style>
 
 </head>
@@ -281,8 +309,14 @@
     <aside class="sidebar">
       <h2>Proyectos</h2>
       <div id="contenedor-proyectos" style="overflow-y: auto; max-height: 600px;"></div>
-      <button class="agregar-proyecto" onclick="agregarProyecto()"><i class="fas fa-plus"></i></button>
-      
+      <div class="generales">
+        <button class="agregar-proyecto" onclick="agregarProyecto()"><i class="fas fa-plus"></i></button>
+        <button class="generar-informe" onclick="solicitarGenerarExcelResumen()"> <i class="fa-solid fa-table-list"></i>
+          Generar Informe</button>
+      </div>
+
+
+
     </aside>
 
     <!-- Contenido principal -->
@@ -304,17 +338,22 @@
         </table>
       </div>
       <div class="acciones">
-        <button id="editar-proyecto" style="background-color: #007bff;" onclick="editarProyecto()" disabled><i class="fas fa-edit"></i> Editar
+        <button id="editar-proyecto" style="background-color: #007bff;" onclick="editarProyecto()" disabled><i
+            class="fas fa-edit"></i> Editar
           Proyecto</button>
-        <button id="eliminar-proyecto" style="background-color: #c41616;" onclick="eliminarProyecto()" disabled><i class="fas fa-trash"></i> Eliminar
+        <button id="eliminar-proyecto" style="background-color: #c41616;" onclick="eliminarProyecto()" disabled><i
+            class="fas fa-trash"></i> Eliminar
           Proyecto</button>
       </div>
     </main>
   </div>
 
   <script>
+
     // Inicializar la página
     window.onload = () => {
+      window.electron.ipcRenderer.send('asegurar-archivo', "proyectos.json");
+      window.electron.ipcRenderer.send('asegurar-archivo', "inventario.json");
       // Cargar proyectos desde el archivo JSON
       fetch('proyectos.json')
         .then(response => response.json())
@@ -418,6 +457,31 @@
 
     function irAInventario() {
       window.location.href = 'inventario.html';
+    }
+
+    // Llamar a la función para generar el archivo Excel resumen
+    function solicitarGenerarExcelResumen() {
+      window.electron.ipcRenderer.send('generar-excel-resumen');
+      window.electron.ipcRenderer.once('excel-generado', () => {
+        window.electron.dialog.showMessageBox({
+          type: 'info',
+          title: 'Excel creado',
+          message: 'El informe Excel ha sido creado exitosamente.',
+          buttons: ['Aceptar'],
+        }).then(() => {
+          console.log('El usuario cerró el mensaje.');
+        });
+      });
+      window.electron.ipcRenderer.once('excel-error', () => {
+        window.electron.dialog.showMessageBox({
+          type: 'error',
+          title: 'Error',
+          message: 'Ha ocurrido un error al generar el Excel. Si tienes el archivo Excel abierto, por favor ciérralo y vuelve a intentarlo.',
+          buttons: ['Aceptar'],
+        }).then(() => {
+          console.log('El usuario cerró el mensaje.');
+        });
+      });
     }
 
   </script>
